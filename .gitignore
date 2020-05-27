@@ -130,3 +130,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+venvs/
+tools/joeynmt
+tools/moses-scripts
+data/
+shared_models/
