@@ -24,6 +24,8 @@ def sample_sents(path: Path, n: int, setseed=None):
         random.seed(setseed)
     else:
         setseed = random.getstate()
+        #adding repeat_enabler in main() somehow broke the seeds without this line.
+        random.seed(setseed)
     
     with open(path, 'r', encoding="utf-8") as text:
         for maxindex, l in enumerate(text):
@@ -123,11 +125,11 @@ def main():
     previousname = ''
     for file, filetype in path_list:
         #in case of resampling this evaluates None only on raw files -> skips rest
-        repeat_enabler =  re.search(r"^\w+/\w+\.\w+-\w+\.\w+\.", file)
+        repeat_enabler =  re.search(r"^\w+.\w+\.\w+-\w+\.\w+\.", file)
         if filetype == "train" and (repeat_enabler is None):
             print(file)
             #fix same seed for corresponding files
-            name = re.search(r"^\w+/(\w+\.\w+-\w+)", file).group(1)
+            name = re.search(r"^\w+.(\w+\.\w+-\w+)", file).group(1)
             if name == previousname:
                 sents, seed = sample_sents(file, args.n, setseed=seed)
             else:
