@@ -23,12 +23,11 @@ bpe_vocab_threshold=10
 
 SECONDS=0
 
-# tokenize dev, test files:
+# tokenize test files:
 
-for corpus in dev test; do
-  cat $data/$corpus.$src-$trg.$src | $MOSES/tokenizer/escape-special-chars.perl -l $src > $data/$corpus.$src-$trg.tokenized.$src
-  cat $data/$corpus.$src-$trg.$trg | $MOSES/tokenizer/escape-special-chars.perl -l $trg > $data/$corpus.$src-$trg.tokenized.$trg
-done
+cat $data/test.$src-$trg.$src | $MOSES/tokenizer/escape-special-chars.perl -l $src > $data/test.$src-$trg.tokenized.$src
+cat $data/test.$src-$trg.$trg | $MOSES/tokenizer/escape-special-chars.perl -l $trg > $data/test.$src-$trg.tokenized.$trg
+
 
 # tokenize sample train file
 
@@ -43,7 +42,7 @@ subword-nmt learn-joint-bpe-and-vocab -i $data/train.$src-$trg.tokenized.$src $d
 
 # apply BPE model to train, test and dev
 
-for corpus in train dev test; do
+for corpus in train test; do
 	subword-nmt apply-bpe -c $base/shared_models/$src-$trg.bpe --vocabulary $base/shared_models/vocab.$src-$trg.$src --vocabulary-threshold $bpe_vocab_threshold < $data/$corpus.$src-$trg.tokenized.$src > $data/$corpus.$src-$trg.bpe.$src
 	subword-nmt apply-bpe -c $base/shared_models/$src-$trg.bpe --vocabulary $base/shared_models/vocab.$src-$trg.$trg --vocabulary-threshold $bpe_vocab_threshold < $data/$corpus.$src-$trg.tokenized.$trg > $data/$corpus.$src-$trg.bpe.$trg
 done
@@ -54,7 +53,7 @@ python $tools/joeynmt/scripts/build_vocab.py $data/train.$src-$trg.bpe.$src $dat
 
 # file sizes
 
-for corpus in train dev test; do
+for corpus in train test; do
 	echo "corpus: "$corpus
 	wc -l $data/$corpus.$src-$trg.bpe.$src $data/$corpus.$src-$trg.bpe.$trg 
 done
