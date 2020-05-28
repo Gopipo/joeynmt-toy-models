@@ -7,4 +7,4 @@ import pandas as pd
 bleu = pd.read_csv('bleu.csv')
 
 sns.set()
-sns.relplot(x="BLEU", y="Beam Size", col="time", data=bleu);
+sns.relplot(x="BLEU", y="Beam Size", col="time", data=bleu)
