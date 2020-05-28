@@ -96,7 +96,7 @@ def parse_args():
     parser.add_argument("path", type=Path, help="path of target directory")
     parser.add_argument("-n", type=int, 
                         help="sample size for train files",
-                        default=100000,
+                        default=110000,
                         required=False)
 
     parser.add_argument("-namerestrict", 
