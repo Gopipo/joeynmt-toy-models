@@ -137,3 +137,4 @@ tools/moses-scripts
 data/
 shared_models/
 models/
+translations/
