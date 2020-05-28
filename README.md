@@ -14,6 +14,8 @@ Added scripts/multicall_preprocess.sh for easy preprocessing of multiple languag
 
 Amended scripts/preprocess.sh to train two bpe vocab sizes
 
+-Due to time constraints, no results present.-
+
 # Requirements
 
 - This only works on a Unix-like system, with bash.
