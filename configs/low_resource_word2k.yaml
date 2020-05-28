@@ -1,7 +1,7 @@
 # this file is adapted from:
 # https://github.com/joeynmt/joeynmt/blob/master/configs/iwslt14_deen_bpe.yaml
 
-name: "low_resource_example"
+name: "low_resource_word2k"
 
 data:
     src: "de"
@@ -16,7 +16,7 @@ data:
     trg_vocab: "shared_models/vocab.de-en.txt"
 
 testing:
-    beam_size: "5"
+    beam_size: 5
     alpha: 1.0
 
 training:
