@@ -2,7 +2,6 @@
 
 
 Based on: https://github.com/joeynmt/joeynmt
-Factor implementation (except model.py): https://github.com/bricksdont/joeynmt/tree/factors_incomplete
 
 # Changes made
 
@@ -14,7 +13,9 @@ Added scripts/multicall_preprocess.sh for easy preprocessing of multiple languag
 
 Amended scripts/preprocess.sh to train two bpe vocab sizes
 
--Due to time constraints, no results present.-
+Plots with seaborn
+
+plot.py (- Due to time constraints, no results present in bleu.csv -)
 
 # Requirements
 
