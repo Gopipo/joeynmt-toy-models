@@ -14,7 +14,8 @@ trg=$2
 # cloned from https://github.com/bricksdont/moses-scripts
 MOSES=$tools/moses-scripts/scripts
 
-bpe_num_operations=2000
+bpe_num_operations_1=2000
+bpe_num_operations_2=3000
 bpe_vocab_threshold=10
 
 #################################################################
@@ -42,17 +43,25 @@ done
 cat $data/train.$src-$trg.100k.$src | $MOSES/tokenizer/escape-special-chars.perl -l $src > $data/train.$src-$trg.tokenized.$src
 cat $data/train.$src-$trg.100k.$trg | $MOSES/tokenizer/escape-special-chars.perl -l $trg > $data/train.$src-$trg.tokenized.$trg
 
-# learn BPE model on train (concatenate both languages)
+# learn BPE 2k model on train (concatenate both languages)
 
 subword-nmt learn-joint-bpe-and-vocab -i $data/train.$src-$trg.tokenized.$src $data/train.$src-$trg.tokenized.$trg \
 	--write-vocabulary $base/shared_models/vocab.$src-$trg.$src $base/shared_models/vocab.$src-$trg.$trg \
-	-s $bpe_num_operations -o $base/shared_models/$src-$trg.bpe
+	-s $bpe_num_operations_1 --total-symbols -o $base/shared_models/$src-$trg.2k.bpe
+    
+# learn BPE 3k model on train (concatenate both languages)    
 
-# apply BPE model to train, test and dev
+subword-nmt learn-joint-bpe-and-vocab -i $data/train.$src-$trg.tokenized.$src $data/train.$src-$trg.tokenized.$trg \
+	--write-vocabulary $base/shared_models/vocab.$src-$trg.$src $base/shared_models/vocab.$src-$trg.$trg \
+	-s $bpe_num_operations_2 --total-symbols -o $base/shared_models/$src-$trg.3k.bpe
+
+# apply BPE models to train, test and dev
 
 for corpus in train dev test; do
-	subword-nmt apply-bpe -c $base/shared_models/$src-$trg.bpe --vocabulary $base/shared_models/vocab.$src-$trg.$src --vocabulary-threshold $bpe_vocab_threshold < $data/$corpus.$src-$trg.tokenized.$src > $data/$corpus.$src-$trg.bpe.$src
-	subword-nmt apply-bpe -c $base/shared_models/$src-$trg.bpe --vocabulary $base/shared_models/vocab.$src-$trg.$trg --vocabulary-threshold $bpe_vocab_threshold < $data/$corpus.$src-$trg.tokenized.$trg > $data/$corpus.$src-$trg.bpe.$trg
+	subword-nmt apply-bpe -c $base/shared_models/$src-$trg.2k.bpe --vocabulary $base/shared_models/vocab.$src-$trg.$src --vocabulary-threshold $bpe_vocab_threshold < $data/$corpus.$src-$trg.tokenized.$src > $data/$corpus.$src-$trg.bpe2k.$src
+	subword-nmt apply-bpe -c $base/shared_models/$src-$trg.2k.bpe --vocabulary $base/shared_models/vocab.$src-$trg.$trg --vocabulary-threshold $bpe_vocab_threshold < $data/$corpus.$src-$trg.tokenized.$trg > $data/$corpus.$src-$trg.bpe2k.$trg
+	subword-nmt apply-bpe -c $base/shared_models/$src-$trg.3k.bpe --vocabulary $base/shared_models/vocab.$src-$trg.$src --vocabulary-threshold $bpe_vocab_threshold < $data/$corpus.$src-$trg.tokenized.$src > $data/$corpus.$src-$trg.bpe3k.$src
+	subword-nmt apply-bpe -c $base/shared_models/$src-$trg.3k.bpe --vocabulary $base/shared_models/vocab.$src-$trg.$trg --vocabulary-threshold $bpe_vocab_threshold < $data/$corpus.$src-$trg.tokenized.$trg > $data/$corpus.$src-$trg.bpe3k.$trg
 done
 
 # build joeynmt vocab

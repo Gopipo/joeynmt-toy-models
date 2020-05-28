@@ -94,17 +94,20 @@ def parse_args():
             optional: -n -namerestrict -langrestrict")
     
     parser.add_argument("path", type=Path, help="path of target directory")
+    
     parser.add_argument("-n", type=int, 
                         help="sample size for train files",
                         default=110000,
                         required=False)
-
+    
+    #not implemented
     parser.add_argument("-namerestrict", 
                         type=str, 
                         help="restrict file selection to filenames starting \
                         with entered string, whitespace separated", 
                         required=False)
                         
+    #not implemented
     parser.add_argument("-langrestrict", 
                         type=str, 
                         help="restrict file selection to entered language codes,\

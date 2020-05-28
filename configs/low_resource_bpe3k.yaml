@@ -1,7 +1,7 @@
 # this file is adapted from:
 # https://github.com/joeynmt/joeynmt/blob/master/configs/iwslt14_deen_bpe.yaml
 
-name: "low_resource_bpe2k"
+name: "low_resource_bpe3k"
 
 data:
     src: "de"
@@ -12,8 +12,8 @@ data:
     level: "bpe"
     lowercase: False
     max_sent_length: 100
-    src_vocab: "shared_models/de-en.2k.bpe"
-    trg_vocab: "shared_models/de-en.2k.bpe"
+    src_vocab: "shared_models/de-en.3k.bpe"
+    trg_vocab: "shared_models/de-en.3k.bpe"
 
 testing:
     beam_size: 5
@@ -36,7 +36,7 @@ training:
     validation_freq: 500
     logging_freq: 100
     eval_metric: "bleu"
-    model_dir: "models/low_resource_bpe2k"
+    model_dir: "models/low_resource_bpe3k"
     overwrite: False
     shuffle: True
     use_cuda: False

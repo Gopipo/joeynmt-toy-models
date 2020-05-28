@@ -1,7 +1,18 @@
 # joeynmt-toy-models
 
-This repo is just a collection of scripts showing how to install [JoeyNMT](https://github.com/joeynmt/joeynmt), preprocess
-data, train and evaluate models.
+
+Based on: https://github.com/joeynmt/joeynmt
+Factor implementation (except model.py): https://github.com/bricksdont/joeynmt/tree/factors_incomplete
+
+# Changes made
+
+Added variants for word level and bpe of vocabsize 2k and 3k to configs/ and scripts/train and scripts/evaluate
+
+Added tools/sentsampler.py for random sentence sampling.
+
+Added scripts/multicall_preprocess.sh for easy preprocessing of multiple language pairs.
+
+Amended scripts/preprocess.sh to train two bpe vocab sizes
 
 # Requirements
 
@@ -29,20 +40,47 @@ Download and install required software:
 
     ./scripts/download_install_packages.sh
 
-Download and split data:
+Download data:
 
-    ./scripts/download_split_data.sh
+    ./scripts/download_data.sh
+    
+For small data sample sentences with sentsampler.py (default 10k for dev set + 100k for train set). sentsampler takes 1 possitional argument: the directory name where the data is stored.
 
-Preprocess data:
+    ./tools/sentsampler.py data
 
-    ./scripts/preprocess.sh
+Preprocess data (language pairs to be preprocessed may be adjusted in the script):
 
-Then finally train a model:
+    ./scripts/multicall_preprocess.sh
 
-    ./scripts/train.sh
+Then train a model:
 
+For word level models:
+
+    ./scripts/train_word2k.sh
+
+For models using bpe:
+
+    ./scripts/train_bpe2k.sh
+    ./scripts/train_bpe3k.sh
+    
 The training process can be interrupted at any time, and the best checkpoint will always be saved.
+    
+To evaluate the models:
 
-Evaluate a trained model with
+    ./scripts/evaluate_bpe.sh
+    ./scripts/evaluate_word.sh
+    
+For translations with alternative beam size:
 
-    ./scripts/evaluate.sh
+-Remove low_resource_bpe3k from line27 of evaluate_bpe
+
+-Change testing parameter beam_size
+
+Then run 
+
+    ./scripts/evaluate_bpe.sh
+
+again.
+
+
+
